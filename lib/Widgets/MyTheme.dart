@@ -17,4 +17,10 @@ class MyTheme {
   static ThemeData darkTheme(BuildContext context) => ThemeData(
         brightness: Brightness.dark,
       );
+
+  //here we are declaring color as we want this color in our application
+
+  static Color goldenYellowColor = Color(0xffFFDF00);
+  static Color creamColor = Color(0xfff5f5f5);
+  static Color darkBlackColor = Color(0xff000000);
 }

@@ -1,9 +1,15 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:velocity_x/velocity_x.dart';
+
 import 'package:flutter_revision_upto_18/Models/catalog.dart';
-import 'package:flutter_revision_upto_18/Widgets/ItemWidget.dart';
-import 'package:flutter_revision_upto_18/Widgets/MyDrawer.dart';
+import 'package:flutter_revision_upto_18/Widgets/MyTheme.dart';
+
+import '../HomeWidgets/CatalogHeader.dart';
+import '../HomeWidgets/Cataloglist.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,30 +38,36 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final dummyList = List.generate(20, (index) => CatalogModel.items[0]);
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Revision"),
-      ),
-      body: (CatalogModel.items != null && CatalogModel.items.isNotEmpty)
-          ? ListView.builder(
-              //itemCount: dummyList.length,
-              itemCount: CatalogModel.items.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ItemWidget(
-                    item: CatalogModel.items[index],
-                    // item: dummyList[index],
-                  ),
-                );
-              },
-            )
-          : Center(
-              child: CircularProgressIndicator(),
+        backgroundColor: MyTheme.creamColor,
+        body: SafeArea(
+          child: Container(
+            padding: Vx.m32,
+            child: Column(
+              children: [
+                CatalogHeader(),
+                if (CatalogModel.items != null && CatalogModel.items.isNotEmpty)
+                  CatalogList().expand()
+                else
+                  CircularProgressIndicator().centered().expand(),
+              ],
             ),
-      drawer: MyDrawer(),
-    );
+          ),
+        ));
+  }
+}
+
+class CatalogList extends StatelessWidget {
+  const CatalogList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: CatalogModel.items.length,
+        itemBuilder: (context, index) {
+          final catalog = CatalogModel.items[index];
+          return CatalogItem(catalog: catalog);
+        });
   }
 }
